@@ -20,11 +20,13 @@ Let's dive right in! So the first step in order to detect any anticheat systems 
 The most common commerical anticheats today are <b>EasyAntiCheat, BattlEye, Valve-AntiCheat (VAC)</b>. I'm not going to name every single anticheat on the mark but some others are <b>RIOT Vanguard, Ricochet, EQU8</b>. These anticheats though are only really game specific, RIOT with Valorant and Ricochet for Call Of Duty and EQU8 is a broad range of games but I've only seen it one a unity game on steam and Splitgate.
 <br><br>
 For this project, we're only covering the most common anticheats. The first step to check them is by using Task Manager or what I prefer, SystemInformer (formally known as ProcessHacker).
-<br><br>
-<b>Once you've launched your application of choice, search for the following text:</b>
 <br>
-<b>"Easy", "BE", "BE".</b>
+So in order to check for the most common anticheats, it's incredibily easy. We're just going to look for the first two I've listed, EasyAntiCheat and BattlEye. VAC is typically just used only in Valve developed games and it's DLL that's remotely streamed. You can read more about VAC here (https://github.com/danielkrupinski/VAC). 
 <br><br>
+<b>When starting up your game of choice, typically you see either the EasyAntiCheat or BattlEye splashscreen/launcher appear. If you don't see anything like this popping up upon starting your game then your game most likely doesn't have either of these anticheats. In order to verify if your game is running any of these anticheats, simply goto Task Manager and look for any processes containing the name "EasyAntiCheat" or "BEService". You can also goto the services section in Task Manager to check if these drivers are running and if they are, your game is running either of these anticheats.</b>
+
+<h3><b>2. Checking the internals </b></h3>
+When you've checked the basics and have verified there isn't any sort of commerical anticheat that I've named then your game could have a internal anticheat system. These private internal anticheat systems are usually popular in games that aren't as popular and that don't have as big of a budget as most other games.
 
 <br>
 
