@@ -39,6 +39,14 @@ Upon starting CombatMaster, there was no evidence of any commerical anticheat. T
 
 # 🔓 Overlay Rendering
 
+In order to make our hack a bit more simplier to use, we can make a user GUI menu for all of our features. In order to do this, we need a few things. The first thing we need is a menu framework, so essentially a GUI library to make our menu with and then ofcourse a method to render our overlay. There is multiple different ways games render their graphics, such as OpenGL, Vulkan, and the famous DirectX. In this case for CombatMaster it is being all done with DirectX-11. 
+<br><br>
+How do I know this? While using SystemInformer, I went through all the modules and found "d3d11.dll" and "GameOverlayRenderer64.dll" which is the DirectX module and steam's 64bit directx hooking library so they can render their ingame overlay and more. 
+<br><br>
+Now that we know what type of rendering our game is using, we now need to find a way to hook/hijack the rendering to allow us to render our own menu. The most common method in order to hook directx is by simply obtaining the dxgi vtable and swapping out the "Present" function with our own "Present" hook. For reference, the "Present" function is a function run in dxgi.dll every frame to process everything on the screen as far as I'm aware. 
+<br><br>
+There is a much easier method than just vtable hooking DXGI. We can simply just hook steams rendering overlay since that's what is used in this game.
+
 <br>
 
 # 🔗 Creating features
