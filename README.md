@@ -63,6 +63,16 @@ void setHandsFov(float value); // Set custom hands field of view
 ![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_13.png?raw=true)
 5. Now that we have our grenades address, let's create a pointer map to it. Essentially, just a chain of pointers leading to that memory so we can have a static address pointing to it so no matter if we restart the game we will have a consistent address pointing to the grenades amount.
 
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_14.png?raw=true)
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_15.png?raw=true)
+6. Now that we have created a pointer map of possible pointers to our grenades value, let's keep this window open and close the game and then repeat steps 1-4 (and make sure when attaching cheat engine you keep the code/address list). Once you have found your new grenades address, rescan the memory in the pointer maps window and then you should have your results narrowed down by quite a bit.
+
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_16.png?raw=true)
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_17.png?raw=true)
+
+7. Typically when it's narrowed down this much, the first result is the static address that will always work. So to test, add the first one into the code list of CheatEngine and then restart the game and attach CheatEngine with the current codelist saved. And if you see the amount of grenades you have matches with what you have in CheatEngine, it has worked successfully! We can also verify this because in the code I've tested this many times and the offsets match.
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_18.png?raw=true)
+
 * <h2><b>Overlay/Directx Hooking:</b></h2>
 <h4>One of the most common methods of hooking directx is through obtaining the IDXGISwapChain vtable in dxgi.dll. I personally don't like to use this method because it just takes more effort and personally and there is a much easier way to do it. Whenever you startup a game, especially if through steam. Steam automatically loads their in-game overlay to allow you to manage things through steam easier without tabbing out. We can easily take advantage of this through hooking their overlay that hooks directx. Below are the steps I took to hook it and render my own menu. I would like to say that I am not the first person who has ever done this, people have thought of this much before I have so I just took it upon myself to figure it out without any help since that's what makes it fun.</h4>
 
