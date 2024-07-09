@@ -1,4 +1,4 @@
-![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/combat2.png?raw=true)
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/combat2.png?raw=true)
 
 # 🔎 Overview
 Combat Master is a tactical FPS free-to-play multiplayer game on steam. Using my current knowledge of reverse engineering and C++ this project is an aim to develop a educational simple internal hack menu for Combat Master.
