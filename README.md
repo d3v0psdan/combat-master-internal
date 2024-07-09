@@ -51,7 +51,10 @@ void setHandsFov(float value); // Set custom hands field of view
 * <h3><b>Overlay/Directx Hooking:</b></h3>
 <h4>One of the most common methods of hooking directx is through obtaining the IDXGISwapChain vtable in dxgi.dll. I personally don't like to use this method because it just takes more effort and personally and there is a much easier way to do it. Whenever you startup a game, especially if through steam. Steam automatically loads their in-game overlay to allow you to manage things through steam easier without tabbing out. We can easily take advantage of this through hooking their overlay that hooks directx. Below are the steps I took to hook it and render my own menu. I would like to say that I am not the first person who has ever done this, people have thought of this much before I have so I just took it upon myself to figure it out without any help since that's what makes it fun.</h4>
 
-1. Open up "GameOverlayRenderer64.dll" in a reverse engineering software of your choice and load up the strings and search for the string `"vtable"`
+1. Open up "GameOverlayRenderer64.dll" in a reverse engineering software of your choice and load up the strings and search for the string `"vtable"`.
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_1.png?raw=true)
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_2.png?raw=true)
+2. Once you found the string, I clicked on the first one then cross-referenced it to a function when then I went into.
 
 # 🔗 Structure (Injector)
 * <h3><b>main.cpp: Simple LoadLibraryA injection.</b></h3>
