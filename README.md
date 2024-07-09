@@ -48,7 +48,22 @@ void setHandsFov(float value); // Set custom hands field of view
 
 <h3>This project would not have been possible without reverse engineering, so in this section I will dive into how I managed to create different aspects of this project through reverse engineering.</h3>
 
-* <h3><b>Overlay/Directx Hooking:</b></h3>
+* <h2><b>Creating features (infinite grenades)</b></h2>
+<h4>Creating the actual hacks for this game wasn't too hard but was just time consuming because it's quite repetitive. CombatMaster was made with UnityEngine with the IL2CPP option and it's quite easy to hack UnityEngine games that use IL2CPP but the only issue is with this game the "global-metadata.dat" file is encrypted and loaded into the games memory I believe. At this point in time, I haven't figured out a solution to decrypt the global-metadata.dat. So the solution for now is just to use CheatEngine and pointer scan for the things we want to mess around with. In this example I'll show my method I used to achieve getting infinite grenades. This method is the same thing I applied to the rest of the features.</h4>
+1. Attach CheatEngine to the process and join a private lobby with BOTs only.
+2. Search for the current value of our grenades (which is 2) then keep throwing grenades until the value goes all the way down to 0.
+
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_10.png?raw=true)
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_11.png?raw=true)
+3. Now since we have 0 grenades, most of the values are still continuing to change in our address list. So what we are going to do is continue spamming the "Next Scan" button until we narrow down our results to as low as possible.
+
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_12.png?raw=true)
+4. I was able to narrow down the results to 11. Moving around and doing other things in the game will help lower this value even further. So now what we want to do is just change each value back to 2 instead of something crazy to reduce the risk of the game crashing. Starting from the bottom of the address list, change each value back to 2 and watch your grenades count. The 3rd last address in my case was the grenades!
+
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_13.png?raw=true)
+5. Now that we have our grenades address, let's create a pointer map to it. Essentially, just a chain of pointers leading to that memory so we can have a static address pointing to it so no matter if we restart the game we will have a consistent address pointing to the grenades amount.
+
+* <h2><b>Overlay/Directx Hooking:</b></h2>
 <h4>One of the most common methods of hooking directx is through obtaining the IDXGISwapChain vtable in dxgi.dll. I personally don't like to use this method because it just takes more effort and personally and there is a much easier way to do it. Whenever you startup a game, especially if through steam. Steam automatically loads their in-game overlay to allow you to manage things through steam easier without tabbing out. We can easily take advantage of this through hooking their overlay that hooks directx. Below are the steps I took to hook it and render my own menu. I would like to say that I am not the first person who has ever done this, people have thought of this much before I have so I just took it upon myself to figure it out without any help since that's what makes it fun.</h4>
 
 1. Open up "GameOverlayRenderer64.dll" in a reverse engineering software of your choice and load up the strings and search for the string `"vtable"`.
@@ -57,12 +72,20 @@ void setHandsFov(float value); // Set custom hands field of view
 2. Once you found the string, I clicked on the first one then cross-referenced it to a function when then I went into.
 ![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_3.png?raw=true)
 3. Now that we're inside the function, the reverse engineering software has labeled some functions for us because of string references. It would be safe to assume that one of these functions that are being hooked is the present function, since that is a function that needs to be hooked in order to render objects on the screen. So how do we figure out which function(sub_xxxxx/qword_xxxxx) is it?
-4. To identifiy which function it is, present has 2 arguments [IDXGISwapChain::Present method (dxgi.h)](https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nf-dxgi-idxgiswapchain-present). But in reality it actually has 3 arguments when disassembling the code because the actual first argument is the reference/pointer to the IDXGISwapChain class instance. So now that we know we're searching for 3 arguments with a return value of a `HRESULT` lets start looking at each of those `sub_xxxxx()` hook detours. The first function only has one argument so lets skip it.
+4. To identifiy which function it is, present has 2 arguments [IDXGISwapChain::Present method (dxgi.h)](https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nf-dxgi-idxgiswapchain-present). But in reality it actually has 3 arguments when disassembling the code because the actual first argument is the reference/pointer to the IDXGISwapChain class instance. So now that we know we're searching for 3 arguments with a return value of a `HRESULT` lets start looking at each of those `sub_xxxxx()` hook detours. 
    
 ![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_4.png?raw=true)
 ![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_5.png?raw=true)
 ![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_6.png?raw=true)
 ![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_7.png?raw=true)
+
+5. We can see that there is 4 functions total, but we can actually narrow it down to just 2 functions. Here's why: the first function only has one argument so we can skip that, but the rest of the functions each have 3 arguments. So what is the solution to know which one it is? We just have to manually test! So what we will need to do to make this easy, is when you go into the function. The return value is always returned by calling the `qword_xxxxx` variable (the original function), so why don't we just exchange the original function to point to our own function? (This is also called a .data pointer swap/hook). We will test each individual address until one of them works.
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_8.png?raw=true)   
+
+6. Let's test the first one and see if it works. Would you look at that! it worked!
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_9.png?raw=true)
+
+8. So thats it for the steam overlay hook. We got lucky and the first function worked, but if it didn't we would just test the rest of the addresses.
 
 # 🔗 Structure (Injector)
 * <h3><b>main.cpp: Simple LoadLibraryA injection.</b></h3>
