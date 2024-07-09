@@ -55,6 +55,14 @@ void setHandsFov(float value); // Set custom hands field of view
 ![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_1.png?raw=true)
 ![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_2.png?raw=true)
 2. Once you found the string, I clicked on the first one then cross-referenced it to a function when then I went into.
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_3.png?raw=true)
+3. Now that we're inside the function, the reverse engineering software has labeled some functions for us because of string references. It would be safe to assume that one of these functions that are being hooked is the present function, since that is a function that needs to be hooked in order to render objects on the screen. So how do we figure out which function(sub_xxxxx/qword_xxxxx) is it?
+4. To identifiy which function it is, present has 2 arguments [IDXGISwapChain::Present method (dxgi.h)](https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nf-dxgi-idxgiswapchain-present). But in reality it actually has 3 arguments when disassembling the code because the actual first argument is the reference/pointer to the IDXGISwapChain class instance. So now that we know we're searching for 3 arguments with a return value of a `HRESULT` lets start looking at each of those `sub_xxxxx()` hook detours. The first function only has one argument so lets skip it.
+   
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_4.png?raw=true)
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_5.png?raw=true)
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_6.png?raw=true)
+![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/images/RE_7.png?raw=true)
 
 # 🔗 Structure (Injector)
 * <h3><b>main.cpp: Simple LoadLibraryA injection.</b></h3>
