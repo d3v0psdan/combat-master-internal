@@ -141,3 +141,6 @@ loadCustomDLL();
 4. Execute the `CreateRemoteThread()` function to call LoadLibraryA inside of the process and pass our allocated memory as the starting parameter, so when we call LoadLibraryA we pass the address of our string which is loaded into the games memory.
 5. Wait for our DLL to execute it's `DllMain()` using `WaitForSingleObject()`.
 6. Close all handles and cleanup memory, using `CloseHandle()` and `VirtualFreeEx()`.
+
+# Conclusion
+This project took about 3weeks to make. It was a lot of time and effort researching how to use reverse engineering tools to achieve the results I wanted. So much was learned and I couldn't have done it without Google, GitHub, GuidedHacking and YouTube. So shoutout to all those platforms. This project was not intended for any nefarious purposes other than for learning, nothing here is "undetectable" to anticheat software and has no intention to be.
