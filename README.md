@@ -1,7 +1,3 @@
-
-> [!CAUTION]
-> 
-
 ![alt text](https://github.com/d3v0psdan/combat-master-internal/blob/main/combat2.png?raw=true)
 
 # 🔎 Overview
@@ -47,6 +43,15 @@ void toggleInfiniteGrenades(bool value); // Infinite grenades hack
 void setWorldFov(float value); // Set custom world field of view
 void setHandsFov(float value); // Set custom hands field of view
 ```
+
+# Reverse Engineering
+
+<h3>This project would not have been possible without reverse engineering, so in this section I will dive into how I managed to create different aspects of this project through reverse engineering.</h3>
+
+* <h3><b>Overlay/Directx Hooking:</b></h3>
+<h4>One of the most common methods of hooking directx is through obtaining the IDXGISwapChain vtable in dxgi.dll. I personally don't like to use this method because it just takes more effort and personally and there is a much easier way to do it. Whenever you startup a game, especially if through steam. Steam automatically loads their in-game overlay to allow you to manage things through steam easier without tabbing out. We can easily take advantage of this through hooking their overlay that hooks directx. Below are the steps I took to hook it and render my own menu. I would like to say that I am not the first person who has ever done this, people have thought of this much before I have so I just took it upon myself to figure it out without any help since that's what makes it fun.</h4>
+
+1. Open up "GameOverlayRenderer64.dll" in a reverse engineering software of your choice and load up the strings and search for the string `"vtable"`
 
 # 🔗 Structure (Injector)
 * <h3><b>main.cpp: Simple LoadLibraryA injection.</b></h3>
